@@ -206,6 +206,7 @@ plt.savefig('charts/sentiment-distribution.jpg')
 plt.show()
 ```
 ![Sentiment-Distribution](https://github.com/EthenDcosta5/Flipkart-Customer-Sentimental-Analysis---Python/blob/main/charts/sentiment-distribution.jpg)
+
 <u>**Sentiment Distribution**</u>
 
 This bar chart displays the distribution of sentiment categories within a dataset. The x-axis represents different sentiment categories, while the y-axis represents the frequency of occurrences in each category. The categories include:
@@ -217,13 +218,171 @@ This bar chart displays the distribution of sentiment categories within a datase
 
 The chart indicates a clear bias towards positive sentiments in the dataset, with "Positive" being the dominant category, followed by "Extremely Positive". Neutral and negative sentiments are comparatively rare.
 
+```python
+# Plotting ratings vs average polarity
+plt.figure(figsize=(10, 6))
+sns.boxplot(x='Average_Polarity', y='Ratings', data = new_data, hue = 'Average_Polarity', palette='coolwarm')
+plt.title('Ratings vs Average Polarity')
+plt.xlabel('Average Polarity')
+plt.ylabel('Ratings')
+plt.xticks(rotation=90)
+plt.savefig('charts/ratings-polarity.jpg')
+plt.show()
+```
+![Ratings vs Average Polarity](https://github.com/EthenDcosta5/Flipkart-Customer-Sentimental-Analysis---Python/blob/main/charts/ratings-polarity.jpg)
 
-## Results
-- **EDA Findings**: Distributions of customer ratings and review statistics were visualized.
+**<u>Correlation</u>:**
+- **Higher sentiment polarities align closely with higher ratings** (e.g., 4.5–5), as evident from the clustering and color gradient.
 
-## Future Work
-- Enhance text preprocessing with advanced techniques.
-- Explore customer feedback trends over time.
+**<u>Neutral Reviews</u>:**
+- **Neutral categories show a balanced spread across various ratings**, indicating less agreement between sentiment and star ratings.
+
+**<u>Negative Reviews</u>:**
+- **Negative and extremely negative reviews often have lower average ratings** but may still exhibit variability due to subjective interpretation by reviewers.
+
+```python
+from wordcloud import WordCloud
+
+positive_reviews = []
+negative_reviews = []
+
+# Classify the positive & negative reviews separately
+for i in range(len(new_data)):
+    if new_data.iloc[i]['Sentiment_Class'] == 'positive' or new_data.iloc[i]['Sentiment_Class'] == 'extremely positive':
+        positive_reviews.append(new_data.iloc[i]['Review'])
+    elif new_data.iloc[i]['Sentiment_Class'] == 'negative' or new_data.iloc[i]['Sentiment_Class'] == 'extremely negative':
+        negative_reviews.append(new_data.iloc[i]['Review'])
+
+# Assign random positive and negative reviews to create a cloud map
+pos = positive_reviews[240]
+neg = negative_reviews[1]
+
+# Generate word clouds for positive and negative reviews
+positive_wordcloud = WordCloud(width=800, height=400, background_color="white", colormap="Greens").generate(pos)
+negative_wordcloud = WordCloud(width=800, height=400, background_color="white", colormap="Reds").generate(neg)
+
+# Plot the word clouds
+plt.figure(figsize=(16, 8))
+
+# Positive reviews word cloud
+plt.subplot(1, 2, 1)
+plt.imshow(positive_wordcloud, interpolation="bilinear")
+plt.axis("off")
+plt.title("Positive Reviews Word Cloud", fontsize=16)
+
+# Negative reviews word cloud
+plt.subplot(1, 2, 2)
+plt.imshow(negative_wordcloud, interpolation="bilinear")
+plt.axis("off")
+plt.title("Negative Reviews Word Cloud", fontsize=16)
+plt.tight_layout()
+plt.savefig('charts/word-cloud.jpg')
+plt.show()
+```
+![Word Cloud](https://github.com/EthenDcosta5/Flipkart-Customer-Sentimental-Analysis---Python/blob/main/charts/word-cloud.jpg)
+
+<u> **Word Cloud Description:** </u>
+
+The above image displays two word clouds generated from customer reviews:
+
+1. **Positive Reviews Word Cloud** (left side, green color):  
+   Highlights frequently mentioned positive words like **"mobile," "first," "performance,"** and **"camera,"** indicating attributes appreciated by customers.
+
+2. **Negative Reviews Word Cloud** (right side, red color):  
+   Features prominent negative terms such as **"fast," "giving," "refresh,"** and **"shame,"** representing commonly cited issues or complaints.
+
+```python
+# Calculate the length of the sentences by calculating the number of words in the review sentence
+new_data['Review_Length'] = new_data['Review'].apply(lambda x: len(x.split()))
+
+# Box Plot for Review Length by Sentiment
+plt.figure(figsize=(8, 6))
+sns.boxplot(x='Sentiment_Class', y='Review_Length', data=new_data, hue = 'Sentiment_Class', palette='Set2')
+plt.title('Review Length vs Sentiment', fontsize=14)
+plt.xlabel('Sentiment', fontsize=12)
+plt.ylabel('Review Length (Number of Words)', fontsize=12)
+plt.savefig('charts/length-sentiment-corr.jpg')
+plt.show()
+```
+![Review Length vs Sentiment](https://github.com/EthenDcosta5/Flipkart-Customer-Sentimental-Analysis---Python/blob/main/charts/length-sentiment-corr.jpg)
+
+**Observations:**
+
+<u> **Positive Sentiment:** </u>
+- **Has the largest variability in review length**, with several outliers.
+- **The median is higher** compared to other categories.
+
+<u> **Extremely Positive Sentiment:** </u>
+- **Has the shortest review lengths overall**, with a compact distribution and fewer outliers.
+
+<u> **Neutral Sentiment:** </u>
+- **Shows a small range of review lengths**, similar to the "Extremely Positive" category.
+
+<u> **Negative Sentiment:** </u>
+- **Exhibits a moderate range of review lengths.**
+- **The median review length is smaller** than "Positive" but larger than "Extremely Positive" and "Neutral."
+
+<u> **Interpretation:** </u>
+- **Positive reviews tend to be more detailed (longer)** compared to other sentiments.
+- **Extremely positive and neutral reviews are often brief**.
+- **Negative reviews have varying lengths** but are generally less wordy than positive reviews.
+
+## Sentimental Analysis Report
+#### <b>Sentiment Analysis Report: Flipkart Customer Reviews for iPhone 15 128GB</b>
+
+##### 1. Overview of the Data Collection and Cleaning Process
+- **Data Source**: Customer reviews were collected from Flipkart for the iPhone 15 128GB model through web scraping with the help of libraries like Selenium and BeautifulSoup .
+- **Preprocessing**:
+  - Reviews were cleaned by removing irrelevant characters, converting cases, and unnecessary spaces.
+  - Text was tokenized to standardize the input for analysis.
+  - Sentiments were classified into categories (e.g., positive, extremely positive, neutral, negative, extremely negative) using sentiment analysis techniques.
+
+##### 2. Sentiment Analysis Results
+- **Sentiment Distribution**:
+  - A majority of reviews were positive, followed by extremely positive ones, as evident from the sentiment distribution graph.
+  - Neutral and negative sentiments accounted for a significantly smaller proportion of the reviews.
+- **Average Sentiment Per Rating**:
+  - Higher star ratings were consistently associated with positive and extremely positive sentiment.
+  - Lower star ratings correlated with neutral or negative sentiments, pinpointing dissatisfaction in these reviews.
+
+##### 3. Insights
+##### Positive Highlights
+- Customers appreciated the **design, camera quality, and overall performance** of the iPhone 15.
+- **Battery life improvements** were a common positive theme.
+  
+##### Common Issues
+- Neutral and negative sentiments highlighted **pricing concerns** and occasional issues with **delivery or packaging**.
+- A few reviews mentioned **compatibility issues** with accessories or software glitches.
+
+##### 4. Recommendations
+##### Product Improvements
+- Consider addressing minor software glitches highlighted by users.
+- Investigate compatibility issues with certain accessories to ensure a seamless customer experience.
+
+##### Marketing Focus
+- Highlight positive aspects like **camera performance**, **battery life**, and the **sleek design** in promotional campaigns.
+- Address pricing concerns through **EMI options**, **exchange offers**, or limited-time discounts to make the product more accessible.
+
+##### Operational Enhancements
+- Improve **delivery processes** to minimize complaints about packaging or delays.
+- Monitor **customer feedback** closely to resolve emerging issues quickly.
+
+## Libraries and Tools used
+
+#### Selenium: 
+For automating the web scraping process.
+
+#### BeautifulSoup: 
+For parsing HTML and extracting review details.
+
+#### Pandas: 
+For data cleaning, processing, and analysis.
+
+#### TextBlob: 
+For performing sentiment analysis on the review text.
+
+#### Matplotlib/Seaborn: 
+For visualizations like sentiment distribution and word clouds.
 
 ## Contributing
 Contributions are welcome! Please fork this repository, make your changes, and submit a pull request.
