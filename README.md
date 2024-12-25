@@ -6,48 +6,8 @@ This repository contains a sentiment analysis project performed on customer revi
 ## Project Objective
 As a Data Analyst at Flipkart, you have been tasked with gauging customer sentiment towards the iPhone 15 128GB model. The primary goal of this project is to analyze public perception and evaluate customer reactions by performing sentiment analysis on product reviews posted by users. By extracting and processing customer reviews, you will derive insights about the overall sentiment (positive or negative) surrounding the product, which can be useful for decision-making, improving customer experience, and identifying key areas for product improvement.
 
-## Folder Structure
-```
-Flipkart-Customer-Sentimental-Analysis---Python/
-|
-|-- datasets/                 # Contains the scraped dataset
-|   |-- flipkart_data.csv     # Scraped customer reviews
-|
-|-- notebooks/                # Jupyter Notebooks for analysis
-|   |-- Flipkart-Customer-Sentimental-Analysis.ipynb
-|
-|-- requirements.txt          # Python dependencies
-|
-|-- README.md                 # Project documentation (this file)
-```
-
-## Installation
-To run the project locally, ensure you have Python installed on your machine. Then, follow these steps:
-
-1. Clone the repository:
-   ```bash
-   git clone https://github.com/EthenDcosta5/Flipkart-Customer-Sentimental-Analysis---Python.git
-   cd Flipkart-Customer-Sentimental-Analysis---Python
-   ```
-
-2. Create a virtual environment (optional but recommended):
-   ```bash
-   python -m venv venv
-   source venv/bin/activate  # On Windows: venv\Scripts\activate
-   ```
-
-3. Install the required dependencies:
-   ```bash
-   pip install -r requirements.txt
-   ```
-
-4. Launch Jupyter Notebook to run the analysis:
-   ```bash
-   jupyter notebook
-   ```
-
 ## Dataset
-The dataset (`flipkart_data.csv`) contains the following columns:
+The dataset (`flipkart_data.csv`) contains the following necessary columns:
 - `review_text`: The review provided by the customer.
 - `rating`: The rating given by the customer (1-5).
 
@@ -100,6 +60,8 @@ This project is licensed under the [MIT License](LICENSE).
 ## Contact
 For queries or collaborations, reach out to:
 - **GitHub**: [EthenDcosta5](https://github.com/EthenDcosta5)
+- **LinkedIn**: [EthenDcosta](https://linkedin.com/in/ethendcosta)
+- **Mail**: [Ethendcosta5@gmail.com](mailto:ethendcosta5@gmail.com)
 
 ---
 
